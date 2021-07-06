@@ -9,6 +9,7 @@ namespace DesignPatternsWithSeleniumWebDriver
     {
         private readonly SignInAndOutPage signInAndOutPage = new SignInAndOutPage();
         private readonly EmailPage emailPage = new EmailPage();
+        private readonly DiskPage diskPage = new DiskPage();
 
         [Test]
         public void GetLoggedInUser()
@@ -169,6 +170,23 @@ namespace DesignPatternsWithSeleniumWebDriver
 
             //Assert
             Assert.AreEqual(expectedInfoMessage, actualInfoMessage, "Emails are still in the draft folder.");
+        }
+
+        [Test]
+        public void DeletedByDraggingPictureIsPresentInRecyclerBin()
+        {
+            //Act
+            emailPage.GoToDisk();
+
+            var expectedDeletedPictureName = diskPage.GetPictureName();
+
+            diskPage.MovePictureToRecyclerBin();
+            diskPage.GoToRecyclerBin();
+            
+            var actualDeletedPictureName = diskPage.GetDeletedPictureName();
+
+            //Assert
+            Assert.AreEqual(expectedDeletedPictureName, actualDeletedPictureName, "Picture is not in the recycle bin.");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace DesignPatternsWithSeleniumWebDriver
         public virtual void InitializeTest()
         {
             browser = Browser.Instance;
-            Browser.NavigateTo("https://yandex.by/");
+            Browser.NavigateTo();
             Browser.MaximizeWindow();
 
             homePage.GoToSignInForm();
@@ -30,6 +30,7 @@ namespace DesignPatternsWithSeleniumWebDriver
         {
             Browser.Driver.Close();
             Browser.Driver.Quit();
+            Browser.Quit();
         }
     }
 }

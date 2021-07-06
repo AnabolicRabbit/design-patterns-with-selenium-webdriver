@@ -55,6 +55,9 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
                     return false;
                 }
             });
+
+            IJavaScriptExecutor executor = Browser.Driver as IJavaScriptExecutor;
+            executor.ExecuteScript("arguments[0].style.background='yellow'", this.GetElement());
         }
 
         public string TagName => throw new NotImplementedException();
@@ -80,6 +83,13 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         {
             WaitForIsVisible();
             Browser.Driver.FindElement(locator).Click();
+        }
+
+        public void JsClick()
+        {
+            WaitForIsVisible();
+            IJavaScriptExecutor executor = Browser.Driver as IJavaScriptExecutor;
+            executor.ExecuteScript("arguments[0].click();", this.GetElement());
         }
 
         public IWebElement FindElement(By by)
@@ -111,6 +121,17 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         {
             WaitForIsVisible();
             Browser.Driver.FindElement(locator).SendKeys(text);
+        }
+
+        public void JsSendKeys(string text)
+        {
+            WaitForIsVisible();
+            Browser.Driver.FindElement(locator).Click();
+            Browser.Driver.FindElement(locator).Clear();
+            IJavaScriptExecutor executor = Browser.Driver as IJavaScriptExecutor;
+            executor.ExecuteScript("arguments[0].setAttribute('value',arguments[1]\n)", this.GetElement(), text);
+            //executor.ExecuteScript("arguments[0].value=arguments[1]\n", this.GetElement(), text);
+            Browser.Driver.FindElement(locator).Click();
         }
 
         public void Submit()

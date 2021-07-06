@@ -28,6 +28,7 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         private readonly BaseElement allEmailsCheckbox = new BaseElement(By.XPath("(//span[@class='checkbox_view'])[1]"));
         private readonly BaseElement clearMark = new BaseElement(By.XPath("//span[@class='mail-NestedList-Item-Clean ns-action']"));
         private readonly BaseElement clearButton = new BaseElement(By.XPath("//span[text()='Очистить']"));
+        private readonly BaseElement diskIcon = new BaseElement(By.XPath("//div[contains(@class, 'PSHeaderIcon-Image_Disk')]"));
         private readonly BaseElement actualUserName = new BaseElement(By.XPath("//a[contains(@class, 'user-account_left-name')]/span[1]"));
         private readonly BaseElement actualAddressee = new BaseElement(By.XPath("(//span[contains(@class, 'mail-MessageSnippet-Item_sender')]/span)[1]"));
         private readonly BaseElement actualSubject = new BaseElement(By.XPath("(//span[contains(@class, 'mail-MessageSnippet-Item_subject')]/span)[1]"));
@@ -125,6 +126,11 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         public string GetActualInfoMessage()
         {
             return actualInfoMessage.GetText();
+        }
+
+        public void GoToDisk()
+        {
+            diskIcon.Click();
         }
     }
 }

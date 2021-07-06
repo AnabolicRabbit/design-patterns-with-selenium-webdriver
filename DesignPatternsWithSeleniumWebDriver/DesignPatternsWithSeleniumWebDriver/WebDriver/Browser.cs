@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+using System;
 
 namespace DesignPatternsWithSeleniumWebDriver.WebDriver
 {
@@ -7,23 +7,43 @@ namespace DesignPatternsWithSeleniumWebDriver.WebDriver
     {
         public static IWebDriver Driver { get; private set; }
         private static Browser currentInstance;
+        private static string browser;
+        public static BrowsersList.BrowserType currentBrowser;
+        public static int implWait;
+        public static double timeoutForElement;
 
         private Browser()
         {
-            var service = FirefoxDriverService.CreateDefaultService();
-            Driver = new FirefoxDriver(service);
+            InitParams();
+            Driver = BrowserFactory.GetDriver(currentBrowser, implWait);
+        }
+
+        private static void InitParams()
+        {
+            implWait = Convert.ToInt32(Configuration.ElementTimeout);
+            timeoutForElement = Convert.ToDouble(Configuration.ElementTimeout);
+            browser = Configuration.Browser;
+            BrowsersList.BrowserType.TryParse(browser, out currentBrowser);
         }
 
         public static Browser Instance => currentInstance ?? (currentInstance = new Browser());
 
-        public static void NavigateTo(string url)
+        public static void NavigateTo()
         {
-            Driver.Navigate().GoToUrl(url);
+            IJavaScriptExecutor executor = Browser.Driver as IJavaScriptExecutor;
+            executor.ExecuteScript("window.location=arguments[0]", Configuration.StartUrl);
         }
 
         public static void MaximizeWindow()
         {
             Driver.Manage().Window.Maximize();
+        }
+
+        public static void Quit()
+        {
+            Driver = null;
+            currentInstance = null;
+            browser = null;
         }
     }
 }
