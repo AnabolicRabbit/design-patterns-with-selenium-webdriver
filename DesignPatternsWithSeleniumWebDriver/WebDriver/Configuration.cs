@@ -1,17 +1,20 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace DesignPatternsWithSeleniumWebDriver.WebDriver
 {
     class Configuration
     {
+        public static BrowsersList.BrowserType currentBrowser;
+
         public static string GetEnviromentVar(string var, string defaultValue)
         {
             return ConfigurationManager.AppSettings[var] ?? defaultValue;
         }
 
-        public static string ElementTimeout => GetEnviromentVar("ElementTimeout", "");
+        public static int ElementTimeout => Convert.ToInt32(GetEnviromentVar("ElementTimeout", ""));
 
-        public static string Browser => GetEnviromentVar("Browser", "");
+        public static bool Browser => BrowsersList.BrowserType.TryParse(GetEnviromentVar("Browser", ""), out currentBrowser);
 
         public static string StartUrl => GetEnviromentVar("StartUrl", "");
 

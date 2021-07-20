@@ -1,4 +1,5 @@
-﻿using DesignPatternsWithSeleniumWebDriver.WebDriver;
+﻿using DesignPatternsWithSeleniumWebDriver.Highlighter;
+using DesignPatternsWithSeleniumWebDriver.WebDriver;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -9,13 +10,18 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 {
     public class BaseElement : IWebElement
     {
-        protected string elementName;
         protected By locator;
         protected IWebElement element;
+
+        private static readonly By emailLogo = By.ClassName("PSHeaderLogo360-360");
 
         public BaseElement(By pointer)
         {
             locator = pointer;
+        }
+
+        public BaseElement()
+        {
         }
 
         public string GetText()
@@ -39,7 +45,7 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 
         public void WaitForIsVisible()
         {
-            new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(5)).Until(condition =>
+            new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(30)).Until(condition =>
             {
                 try
                 {
@@ -56,8 +62,20 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
                 }
             });
 
-            IJavaScriptExecutor executor = Browser.Driver as IJavaScriptExecutor;
-            executor.ExecuteScript("arguments[0].style.background='yellow'", this.GetElement());
+            try
+            {
+                Browser.Driver.FindElement(emailLogo);
+
+                BaseBackgroundHighlighter highlighter = new BaseBackgroundHighlighter();
+                FrameHighlighterDecorator decorator = new FrameHighlighterDecorator(highlighter);
+                decorator.HighlightElement(this.GetElement());
+            }
+            catch
+            {
+                BaseBackgroundHighlighter highlighter = new BaseBackgroundHighlighter();
+                highlighter.HighlightElement(this.GetElement());
+            }
+
         }
 
         public string TagName => throw new NotImplementedException();
@@ -82,7 +100,7 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         public void Click()
         {
             WaitForIsVisible();
-            Browser.Driver.FindElement(locator).Click();
+            GetElement().Click();
         }
 
         public void JsClick()
@@ -126,12 +144,8 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         public void JsSendKeys(string text)
         {
             WaitForIsVisible();
-            Browser.Driver.FindElement(locator).Click();
-            Browser.Driver.FindElement(locator).Clear();
             IJavaScriptExecutor executor = Browser.Driver as IJavaScriptExecutor;
             executor.ExecuteScript("arguments[0].setAttribute('value',arguments[1]\n)", this.GetElement(), text);
-            //executor.ExecuteScript("arguments[0].value=arguments[1]\n", this.GetElement(), text);
-            Browser.Driver.FindElement(locator).Click();
         }
 
         public void Submit()

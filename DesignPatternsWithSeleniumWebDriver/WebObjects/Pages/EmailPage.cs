@@ -33,11 +33,8 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         private readonly BaseElement actualAddressee = new BaseElement(By.XPath("(//span[contains(@class, 'mail-MessageSnippet-Item_sender')]/span)[1]"));
         private readonly BaseElement actualSubject = new BaseElement(By.XPath("(//span[contains(@class, 'mail-MessageSnippet-Item_subject')]/span)[1]"));
         private readonly BaseElement actualBody = new BaseElement(By.XPath("(//span[contains(@class, 'mail-MessageSnippet-Item_firstline')]/span)[1]"));
-        private readonly BaseElement numberOfDraftEmails = new BaseElement(By.XPath("//a[@href='#draft']/div/span"));
+        private readonly BaseElement numberOfDraftEmailsMark = new BaseElement(By.XPath("//a[@href='#draft']/div/span"));
         private readonly BaseElement actualInfoMessage = new BaseElement(By.XPath("(//div[@class='b-messages__placeholder']/div)[1]"));
-
-        public int initialNumberOfDraftEmails => GetInitialNumberOfDraftEmails();
-        public int actualNumberOfDraftEmails => GetActualNumberOfDraftEmails();
 
         public void SwitchToEmailPage()
         {
@@ -45,19 +42,14 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
             Browser.Driver.SwitchTo().Window(currentTab);
         }
 
-        public void CreateDraftEmail()
+        public void CreateDraftEmail(string subjectText, string bodyText)
         {
             writeEmailButton.Click();
             toWhomField.Click();
             toWhomOption.Click();
-            subjectField.SendKeys("Greeting");
-            bodyField.SendKeys("Hi, Selenium!");
+            subjectField.SendKeys(subjectText);
+            bodyField.SendKeys(bodyText);
             draftsOption.Click();
-        }
-
-        public int GetInitialNumberOfDraftEmails()
-        {
-            return int.Parse(GetNumberOfDraftEmails());
         }
 
         public void SendDraftEmail()
@@ -70,21 +62,6 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         public void GoToDraftEmails()
         {
             draftsOption.Click();
-        }
-
-        public int GetActualNumberOfDraftEmails()
-        {
-            int actualNumberOfDraftEmails;
-            try
-            {
-                actualNumberOfDraftEmails = int.Parse(GetNumberOfDraftEmails());
-            }
-            catch (NoSuchElementException)
-            {
-                actualNumberOfDraftEmails = 0;
-            }
-
-            return actualNumberOfDraftEmails;
         }
 
         public void GoToSentEmails()
@@ -141,9 +118,19 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
             return actualBody.GetText();
         }
 
-        public string GetNumberOfDraftEmails()
+        public int GetNumberOfDraftEmails()
         {
-            return numberOfDraftEmails.GetText();
+            int numberOfDraftEmails;
+            try
+            {
+                numberOfDraftEmails = int.Parse(numberOfDraftEmailsMark.GetText());
+            }
+            catch (NoSuchElementException)
+            {
+                numberOfDraftEmails = 0;
+            }
+
+            return numberOfDraftEmails;
         }
 
         public string GetActualInfoMessage()
