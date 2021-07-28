@@ -1,6 +1,9 @@
 ﻿using DesignPatternsWithSeleniumWebDriver.WebDriver;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
+using System;
+using System.Linq;
 
 namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 {
@@ -10,26 +13,30 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 
         public DiskPage() : base(uploadButton, "Disk Page") { }
 
-        private readonly BaseElement pictureIcon = new BaseElement(By.XPath("(//span[@class='clamped-text'])[1]"));
-        private readonly BaseElement pictureForDeletionElement = new BaseElement(By.XPath("(//div[contains(@class, 'listing-item__icon')])[2]"));
-        private readonly BaseElement recycleBinElement = new BaseElement(By.XPath("(//div[contains(@class, 'listing-item__icon')])[last()]"));
+        private readonly By listItem = By.XPath("//div[contains(@class, 'listing-item')]");
+        private readonly By icon = By.XPath("//div[contains(@class, 'listing-item__icon')]");
 
-        public string GetPictureName()
+        public string GetPictureName(string pictureItemName)
         {
-            return pictureIcon.GetText();
+            var wait = new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(5));
+            IWebElement pictureIcon = wait.Until(e => e.FindElement(icon));
+            string pictureName = Browser.Driver.FindElements(listItem).First(x => x.Text.Equals(pictureItemName)).Text;
+            return pictureName;
         }
 
-        public void MovePictureToRecyclerBin()
+        public void MovePictureToRecyclerBin(string pictureItemName, string recycleBinItemName)
         {
-            IWebElement pictureForDeletion = pictureForDeletionElement.GetElement();
-            IWebElement recycleBin = recycleBinElement.GetElement();
-            new Actions(Browser.Driver).DragAndDrop(pictureForDeletion, recycleBin).Build().Perform();
+            var actions = new Actions(Browser.Driver);
+            IWebElement pictureForDeletion = Browser.Driver.FindElements(listItem).First(x => x.Text.Equals(pictureItemName));
+            IWebElement recycleBin = Browser.Driver.FindElements(listItem).First(x => x.Text.Equals(recycleBinItemName));
+            actions.DragAndDrop(pictureForDeletion, recycleBin).Build().Perform();
         }
 
-        public void GoToRecyclerBin()
+        public void GoToRecyclerBin(string item)
         {
-            IWebElement recycleBin = recycleBinElement.GetElement();
-            new Actions(Browser.Driver).DoubleClick(recycleBin).Build().Perform();
+            var actions = new Actions(Browser.Driver);
+            IWebElement recycleBin = Browser.Driver.FindElements(listItem).First(x => x.Text.Equals(item));
+            actions.DoubleClick(recycleBin).Build().Perform();
         }
     }
 }

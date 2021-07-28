@@ -20,10 +20,6 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
             locator = pointer;
         }
 
-        public BaseElement()
-        {
-        }
-
         public string GetText()
         {
             WaitForIsVisible();
@@ -45,7 +41,7 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 
         public void WaitForIsVisible()
         {
-            new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(30)).Until(condition =>
+            new WebDriverWait(Browser.Driver, TimeSpan.FromSeconds(10)).Until(condition =>
             {
                 try
                 {
@@ -75,7 +71,6 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
                 BaseBackgroundHighlighter highlighter = new BaseBackgroundHighlighter();
                 highlighter.HighlightElement(this.GetElement());
             }
-
         }
 
         public string TagName => throw new NotImplementedException();
@@ -117,7 +112,7 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 
         public ReadOnlyCollection<IWebElement> FindElements(By by)
         {
-            throw new NotImplementedException();
+            return Browser.Driver.FindElements(locator);
         }
 
         public string GetAttribute(string attributeName)

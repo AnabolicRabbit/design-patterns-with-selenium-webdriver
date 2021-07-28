@@ -146,12 +146,12 @@ namespace DesignPatternsWithSeleniumWebDriver
             //Act
             emailPage.GoToDisk();
 
-            var expectedDeletedPictureName = diskPage.GetPictureName();
+            var expectedDeletedPictureName = diskPage.GetPictureName(pictureItemName);
 
-            diskPage.MovePictureToRecyclerBin();
-            diskPage.GoToRecyclerBin();
+            diskPage.MovePictureToRecyclerBin(pictureItemName, recycleBinItemName);
+            diskPage.GoToRecyclerBin(recycleBinItemName);
 
-            var actualDeletedPictureName = diskPage.GetPictureName();
+            var actualDeletedPictureName = diskPage.GetPictureName(pictureItemName);
 
             //Assert
             Assert.AreEqual(expectedDeletedPictureName, actualDeletedPictureName, "Picture is not in the recycle bin.");
