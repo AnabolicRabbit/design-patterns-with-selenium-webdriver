@@ -14,6 +14,8 @@ namespace DesignPatternsWithSeleniumWebDriver
 
         public string subjectText = "Greeting";
         public string bodyText = "Hi, Selenium!";
+        public string pictureItemName = "Горы.jpg";
+        public string recycleBinItemName = "Корзина";
 
         [SetUp]
         public virtual void InitializeTest()
