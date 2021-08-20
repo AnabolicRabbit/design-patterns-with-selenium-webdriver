@@ -17,6 +17,17 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
         private readonly EmailPage emailPage = new EmailPage();
         private readonly DiskPage diskPage = new DiskPage();
 
+        private string actualUserName;
+        private string actualSubject;
+        private string actualAddressee;
+        private string actualBody;
+        private int numberOfDraftEmailsBeforeSending;
+        private int actualDraftEmailsDifference;
+        private string actualLoginMessage;
+        private string actualInfoMessage;
+        private string expectedDeletedPictureName;
+        private string actualDeletedPictureName;
+
         public YandexMailTestsSteps(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
@@ -40,8 +51,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
             emailPage.SwitchToEmailPage();
         }
 
-        private string actualUserName;
-
         [When(@"I get the actual user name from User Account option")]
         public string GetActualUserName()
         {
@@ -61,8 +70,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
             emailPage.CreateDraftEmail(subjectText, bodyText);
         }
 
-        private string actualSubject;
-
         [When(@"get the actual subject")]
         public string GetActualCreatedDraftEmailSubject()
         {
@@ -76,16 +83,12 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
             Assert.AreEqual(subjectText, actualSubject, "The actual subject differs from the expected.");
         }
 
-        private string actualAddressee;
-
         [When(@"get the actual addressee")]
         public string GetActualCreatedDraftEmailAddressee()
         {
             actualAddressee = emailPage.GetActualAddressee();
             return actualAddressee;
         }
-
-        private string actualBody;
 
         [When(@"get the actual body")]
         public string GetActualCreatedDraftEmailBody()
@@ -101,8 +104,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
             Assert.AreEqual(subjectText, actualSubject, "The actual subject differs from the expected.");
             Assert.AreEqual(bodyText, actualBody, "The actual body differs from the expected.");
         }
-
-        private int numberOfDraftEmailsBeforeSending;
 
         [When(@"get number of emails in the Draft folder before sending")]
         public int GetNumberOfDraftEmailsBeforeSending()
@@ -122,8 +123,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
         {
             emailPage.GoToDraftEmails();
         }
-
-        private int actualDraftEmailsDifference;
 
         [When(@"get difference between emails number before and after sending")]
         public int GetActualDifferenceBetweenEmailsNumberBeforeAndAfterSending()
@@ -151,8 +150,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
         {
             emailPage.GoToSignOutForm();
         }
-
-        private string actualLoginMessage;
 
         [When(@"get the actual login message")]
         public string GetActualLoginMessage()
@@ -185,8 +182,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
             emailPage.DeleteAllDraftEmails();
         }
 
-        private string actualInfoMessage;
-
         [When(@"get the actual info message")]
         public string GetActualInfoMessage()
         {
@@ -218,8 +213,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
             emailPage.GoToDisk();
         }
 
-        private string expectedDeletedPictureName;
-
         [When(@"get a picture for deletion '(.*)'")]
         public string GetPictureForDeletionName(string pictureItemName)
         {
@@ -238,8 +231,6 @@ namespace DesignPatternsWithSeleniumWebDriver.Tests.SpecFlow.Steps
         {
             diskPage.GoToRecyclerBin(recycleBinItemName);
         }
-
-        private string actualDeletedPictureName;
 
         [When(@"get the deleted picture '(.*)'")]
         public string GetDeletedPictureName(string pictureItemName)

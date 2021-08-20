@@ -1,6 +1,8 @@
 ﻿using OpenQA.Selenium;
 using System.Linq;
 using DesignPatternsWithSeleniumWebDriver.WebDriver;
+using DesignPatternsWithSeleniumWebDriver.Logging;
+using System;
 
 namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 {
@@ -36,6 +38,8 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         private readonly BaseElement actualBody = new BaseElement(By.XPath("(//span[contains(@class, 'mail-MessageSnippet-Item_firstline')]/span)[1]"));
         private readonly BaseElement numberOfDraftEmailsMark = new BaseElement(By.XPath("//a[@href='#draft']/div/span"));
         private readonly BaseElement actualInfoMessage = new BaseElement(By.XPath("(//div[@class='b-messages__placeholder']/div)[1]"));
+
+        public Logger Log;
 
         public void SwitchToEmailPage()
         {
@@ -123,13 +127,18 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
         public int GetNumberOfDraftEmails()
         {
             int numberOfDraftEmails;
+
+            this.Log = LoggerManager.GetLogger(this.GetType());
+
             try
             {
                 numberOfDraftEmails = int.Parse(numberOfDraftEmailsMark.GetText());
+                Log.Debug(string.Format("The number of draft emails is {0}.", numberOfDraftEmails));
             }
             catch (NoSuchElementException)
             {
                 numberOfDraftEmails = 0;
+                Log.Error("There are no draft emails found.");
             }
 
             return numberOfDraftEmails;
