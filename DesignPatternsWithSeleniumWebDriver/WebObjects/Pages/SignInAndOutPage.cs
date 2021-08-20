@@ -17,9 +17,9 @@ namespace DesignPatternsWithSeleniumWebDriver.WebObjects
 
         public void LoginToEmail(User user)
         {
-            LoginField.SendKeys(user.DataUser[0]);
+            LoginField.JsSendKeys(user.DataUser[0]);
             SignInButton.JsClick();
-            PasswordField.SendKeys(user.DataUser[1]);
+            PasswordField.JsSendKeys(user.DataUser[1]);
             SignInButton.JsClick();
         }
 

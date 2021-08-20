@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using System;
 
 namespace DesignPatternsWithSeleniumWebDriver.WebDriver
 {
@@ -7,26 +6,16 @@ namespace DesignPatternsWithSeleniumWebDriver.WebDriver
     {
         public static IWebDriver Driver { get; private set; }
         private static Browser currentInstance;
-        private static string browser;
-        public static BrowsersList.BrowserType currentBrowser;
-        public static int implWait;
-        public static double timeoutForElement;
 
         private Browser()
         {
-            InitParams();
-            Driver = BrowserFactory.GetDriver(currentBrowser, implWait);
+            Driver = BrowserFactory.GetDriver(Configuration.currentBrowser, Configuration.ElementTimeout);
         }
 
-        private static void InitParams()
+        public static Browser GetInstance()
         {
-            implWait = Convert.ToInt32(Configuration.ElementTimeout);
-            timeoutForElement = Convert.ToDouble(Configuration.ElementTimeout);
-            browser = Configuration.Browser;
-            BrowsersList.BrowserType.TryParse(browser, out currentBrowser);
+            return currentInstance ?? (currentInstance = new Browser());
         }
-
-        public static Browser Instance => currentInstance ?? (currentInstance = new Browser());
 
         public static void NavigateTo()
         {
@@ -43,7 +32,6 @@ namespace DesignPatternsWithSeleniumWebDriver.WebDriver
         {
             Driver = null;
             currentInstance = null;
-            browser = null;
         }
     }
 }

@@ -8,16 +8,17 @@ namespace DesignPatternsWithSeleniumWebDriver
 {
     public abstract class BaseTest
     {
-        protected Browser browser = Browser.Instance;
-
         private readonly HomePage homePage = new HomePage();
         private readonly SignInAndOutPage signInAndOutPage = new SignInAndOutPage();
         private readonly EmailPage emailPage = new EmailPage();
 
+        public string subjectText = "Greeting";
+        public string bodyText = "Hi, Selenium!";
+
         [SetUp]
         public virtual void InitializeTest()
         {
-            browser = Browser.Instance;
+            Browser.GetInstance();
             Browser.NavigateTo();
             Browser.MaximizeWindow();
 
