@@ -1,6 +1,4 @@
-﻿using DesignPatternsWithSeleniumWebDriver.WebObjects;
-
-namespace DesignPatternsWithSeleniumWebDriver.Utilities
+﻿namespace DesignPatternsWithSeleniumWebDriver.Utilities
 {
     public class ExpectedResults
     {
